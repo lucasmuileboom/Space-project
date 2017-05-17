@@ -7,14 +7,15 @@ public class PlayerInput : MonoBehaviour
     public bool left = false;
     public bool right = false;
     public bool up = false;
+    public bool shoot = false;
 
 	void Update ()
     {
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             up = true;
         }
-        if (Input.GetKeyUp("space"))
+        if (Input.GetKeyUp(KeyCode.W))
         {
             up = false;
         }
@@ -33,6 +34,14 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.D))
         {
             right = false;
+        }
+        if (Input.GetKeyDown("space"))
+        {
+            shoot = true;
+        }
+        if (Input.GetKeyUp("space"))
+        {
+            shoot = false;
         }
     }
 
