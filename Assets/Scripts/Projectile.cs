@@ -5,24 +5,21 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private int speed = 50;
-    void Start()
+    private void Start()
     {
         Destroy(gameObject, 0.2f);
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         transform.Translate(Vector2.right * speed * Time.deltaTime);
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter2D(Collision2D coll)
     {
-        if (other.tag == "Enemy")
+        if (coll.gameObject.tag == "Enemy")
         {
             Destroy(gameObject, 0f);
+            Destroy(coll.gameObject, 0f);
         }
-
-
     }
 }

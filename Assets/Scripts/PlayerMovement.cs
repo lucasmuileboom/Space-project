@@ -9,28 +9,26 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveVector;
     private Vector2 jumpReset;
 
-    private int jumpForce;
-    private float moveSpeed = 1;
+    private int jumpForce = 15;
     private int moveSpeedMax = 10;
+    private float moveSpeed = 1;
     private float gravity = 0.4f;
     private float jumpForceCurrent;
     private float moveSpeedCurrent;
     private float moveSpeedDecFactor;
-    private bool jump = false;
-    private bool flipped;
+    private bool jumping = false;
 
-    void Awake()
+    private void Awake()
     {
         _PlayerInput = GetComponent<PlayerInput>();
         _PlayerColision = GetComponent<PlayerColision>();
     }
-    void Update()
+    private void Update()
     {
-        if (_PlayerColision.Grounded && jump)
+        if (_PlayerColision.Grounded && jumping)
         {
-            jump = false;
+            jumping = false;
         }
-
         if (!_PlayerInput.right && _PlayerInput.left)
         {
             flipL();
@@ -40,43 +38,37 @@ public class PlayerMovement : MonoBehaviour
             flipR();
         }
     }
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (_PlayerInput.left)//left
         {
             flipL();
-            moveSpeedCurrent += moveSpeed;
-            if (moveSpeedCurrent >= moveSpeedMax)
-            {
-                moveSpeedCurrent = moveSpeedMax;
-            }
+            moveLeft();
         }
         else if (_PlayerInput.right)//right
         {
             flipR();
-            moveSpeedCurrent += moveSpeed;
-            if (moveSpeedCurrent >= moveSpeedMax)
+            moveRight();            
+        }
+        else//idle
+        {
+            idle();            
+        }
+        if (_PlayerInput.up)//jump
+        {
+            if (!jumping && _PlayerColision.Grounded)
             {
-                moveSpeedCurrent = moveSpeedMax;
+                jump();
+                
             }
         }
-        else//decreased movement
+        if (_PlayerInput.down)//bukken
         {
-            moveSpeedCurrent *= moveSpeedDecFactor;
-            if (moveSpeedCurrent >= -moveSpeed && moveSpeedCurrent <= moveSpeed)
-            {
-                moveSpeedCurrent = 0;
-            }
+            crouch();
         }
-        if (_PlayerInput.up)//jumping
+        if (!_PlayerInput.down)//stand up
         {
-            if (!jump && _PlayerColision.Grounded)
-            {
-                jumpForceCurrent += jumpForce;
-                jump = true;
-                _PlayerColision.Grounded = false;
-                moveSpeedCurrent = moveSpeedCurrent / 2;
-            }
+            standUp();
         }
         if (!_PlayerColision.Grounded)//air
         {
@@ -84,9 +76,9 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = 0.1f;
             moveSpeedDecFactor = 0.90f;
         }
-        else if (_PlayerColision.Grounded)//ground
+        else if (_PlayerColision.Grounded)//grounded
         {
-            jump = false;
+            jumping = false;
             jumpForceCurrent = 0;
             moveSpeed = 1;
             moveSpeedDecFactor = 0.50f;            
@@ -101,5 +93,44 @@ public class PlayerMovement : MonoBehaviour
     private void flipR()
     {
         transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+    private void crouch()
+    {
+      
+    }
+    private void standUp()
+    {
+
+    }
+    private void moveLeft()
+    {
+        moveSpeedCurrent += moveSpeed;
+        if (moveSpeedCurrent >= moveSpeedMax)
+        {
+            moveSpeedCurrent = moveSpeedMax;
+        }
+    }
+    private void moveRight()
+    {
+        moveSpeedCurrent += moveSpeed;
+        if (moveSpeedCurrent >= moveSpeedMax)
+        {
+            moveSpeedCurrent = moveSpeedMax;
+        }
+    }
+    private void jump()
+    {
+        jumpForceCurrent += jumpForce;
+        jumping = true;
+        _PlayerColision.Grounded = false;
+        moveSpeedCurrent = moveSpeedCurrent / 2;
+    }
+    private void idle()
+    {
+        moveSpeedCurrent *= moveSpeedDecFactor;
+        if (moveSpeedCurrent >= -moveSpeed && moveSpeedCurrent <= moveSpeed)
+        {
+            moveSpeedCurrent = 0;
+        }
     }
 }

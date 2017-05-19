@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
+    PlayerShoot _PlayerShoot;
     public bool left = false;
     public bool right = false;
     public bool up = false;
+    public bool down = false;
     public bool shoot = false;
 
-	void Update ()
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        _PlayerShoot = GetComponent<PlayerShoot>();
+    }
+	private void Update ()
+    {
+        if (Input.GetKeyDown(KeyCode.W))//Up
         {
             up = true;
         }
@@ -19,7 +25,15 @@ public class PlayerInput : MonoBehaviour
         {
             up = false;
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.S))//down
+        {
+            down = true;
+        }
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            down = false;
+        }
+        if (Input.GetKeyDown(KeyCode.A))//left
         {
             left = true;
         }
@@ -27,7 +41,7 @@ public class PlayerInput : MonoBehaviour
         {
             left = false;
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D))//right
         {
             right = true;
         }
@@ -35,14 +49,13 @@ public class PlayerInput : MonoBehaviour
         {
             right = false;
         }
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space"))//shoot
         {
-            shoot = true;
+            _PlayerShoot.shoot();
         }
-        if (Input.GetKeyUp("space"))
+        if (Input.GetKeyDown(KeyCode.R))//reload
         {
-            shoot = false;
+            //_PlayerShoot.reload();
         }
     }
-
 }
