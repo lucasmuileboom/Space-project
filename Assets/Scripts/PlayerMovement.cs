@@ -6,21 +6,19 @@ public class PlayerMovement : MonoBehaviour
 {
     private PlayerInput _PlayerInput;
     private PlayerColision _PlayerColision;
-    private Rigidbody2D _Rigidbody;
-    private Vector2 moveposition;
+    private Vector2 moveVector;
+    private Vector2 jumpReset;
 
-    [SerializeField]private int speed;
-    [SerializeField]private int jumpPower;
-
-    //private int jumpSpeed;
+    private int jumpForce;
+    private float moveSpeed = 1;
+    private int moveSpeedMax = 10;
+    private float gravity = 0.4f;
+    private float jumpForceCurrent;
+    private float moveSpeedCurrent;
+    private float moveSpeedDecFactor;
     private bool jump = false;
     private bool flipped;
 
-    void Start()
-    {
-        _Rigidbody = GetComponent<Rigidbody2D>();
-        //jumpSpeed = speed / 10;
-    }
     void Awake()
     {
         _PlayerInput = GetComponent<PlayerInput>();
@@ -44,30 +42,57 @@ public class PlayerMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (_PlayerColision.Grounded)//op de grond
+        if (_PlayerInput.left)//left
         {
-            //_Rigidbody.drag = 25;
-            if (_PlayerInput.right)//right
+            flipL();
+            moveSpeedCurrent += moveSpeed;
+            if (moveSpeedCurrent >= moveSpeedMax)
             {
-                // _Rigidbody.AddForce(Vector2.right * Time.fixedDeltaTime * speed);
-                _Rigidbody.MovePosition(new Vector2(transform.position.x + 1 * Time.fixedDeltaTime * speed, _Rigidbody.velocity.y + transform.position.y));
+                moveSpeedCurrent = moveSpeedMax;
             }
-            if (_PlayerInput.left)//left
+        }
+        else if (_PlayerInput.right)//right
+        {
+            flipR();
+            moveSpeedCurrent += moveSpeed;
+            if (moveSpeedCurrent >= moveSpeedMax)
             {
-                _Rigidbody.MovePosition(new Vector2(transform.position.x - 1 * Time.fixedDeltaTime * speed, _Rigidbody.velocity.y + transform.position.y));
-                //_Rigidbody.AddForce(Vector2.left * Time.fixedDeltaTime * speed);
+                moveSpeedCurrent = moveSpeedMax;
             }
-            if (_PlayerInput.up && !jump)//jump
+        }
+        else//decreased movement
+        {
+            moveSpeedCurrent *= moveSpeedDecFactor;
+            if (moveSpeedCurrent >= -moveSpeed && moveSpeedCurrent <= moveSpeed)
             {
-                _Rigidbody.drag = 1;
-                _Rigidbody.AddForce(Vector2.up * jumpPower);
+                moveSpeedCurrent = 0;
+            }
+        }
+        if (_PlayerInput.up)//jumping
+        {
+            if (!jump && _PlayerColision.Grounded)
+            {
+                jumpForceCurrent += jumpForce;
                 jump = true;
+                _PlayerColision.Grounded = false;
+                moveSpeedCurrent = moveSpeedCurrent / 2;
             }
         }
-        else if (!_PlayerColision.Grounded)//in de lucht
+        if (!_PlayerColision.Grounded)//air
         {
-           // _Rigidbody.drag = 1;
+            jumpForceCurrent -= gravity;
+            moveSpeed = 0.1f;
+            moveSpeedDecFactor = 0.90f;
         }
+        else if (_PlayerColision.Grounded)//ground
+        {
+            jump = false;
+            jumpForceCurrent = 0;
+            moveSpeed = 1;
+            moveSpeedDecFactor = 0.50f;            
+        }
+        moveVector = new Vector2(moveSpeedCurrent, jumpForceCurrent);
+        transform.Translate(moveVector * Time.deltaTime);
     }
     private void flipL()
     {
