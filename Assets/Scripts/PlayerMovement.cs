@@ -8,16 +8,17 @@ public class PlayerMovement : MonoBehaviour
     private PlayerColision _PlayerColision;
     private Vector2 moveVector;
     private Vector2 jumpReset;
-
     private int jumpForce = 15;
     private int moveSpeedMax = 10;
+    private bool jumping = false;
+    private bool flipped = false;
     private float moveSpeed = 1;
+    private float airMoveSpeed = 0.1f;
     private float gravity = 0.4f;
     private float jumpForceCurrent;
     private float moveSpeedCurrent;
     private float moveSpeedDecFactor;
-    private bool jumping = false;
-
+    
     private void Awake()
     {
         _PlayerInput = GetComponent<PlayerInput>();
@@ -43,12 +44,12 @@ public class PlayerMovement : MonoBehaviour
         if (_PlayerInput.left)//left
         {
             flipL();
-            moveLeft();
+            moveLeft();          
         }
         else if (_PlayerInput.right)//right
         {
             flipR();
-            moveRight();            
+            moveRight();
         }
         else//idle
         {
@@ -73,14 +74,12 @@ public class PlayerMovement : MonoBehaviour
         if (!_PlayerColision.Grounded)//air
         {
             jumpForceCurrent -= gravity;
-            moveSpeed = 0.1f;
             moveSpeedDecFactor = 0.90f;
         }
         else if (_PlayerColision.Grounded)//grounded
         {
             jumping = false;
             jumpForceCurrent = 0;
-            moveSpeed = 1;
             moveSpeedDecFactor = 0.50f;            
         }
         moveVector = new Vector2(moveSpeedCurrent, jumpForceCurrent);
@@ -88,23 +87,32 @@ public class PlayerMovement : MonoBehaviour
     }
     private void flipL()
     {
-        transform.rotation = Quaternion.Euler(0, 180, 0);
+        if (!flipped)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            moveSpeedCurrent = -moveSpeedCurrent;
+            flipped = true;
+        } 
     }
     private void flipR()
     {
-        transform.rotation = Quaternion.Euler(0, 0, 0);
-    }
-    private void crouch()
-    {
-      
-    }
-    private void standUp()
-    {
-
-    }
+        if (flipped)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            moveSpeedCurrent = -moveSpeedCurrent;
+            flipped = false;
+        }       
+    }    
     private void moveLeft()
     {
-        moveSpeedCurrent += moveSpeed;
+        if (_PlayerColision.Grounded)
+        {
+            moveSpeedCurrent += moveSpeed;
+        }
+        else if (!_PlayerColision.Grounded)
+        {
+            moveSpeedCurrent += airMoveSpeed;
+        }
         if (moveSpeedCurrent >= moveSpeedMax)
         {
             moveSpeedCurrent = moveSpeedMax;
@@ -112,11 +120,26 @@ public class PlayerMovement : MonoBehaviour
     }
     private void moveRight()
     {
-        moveSpeedCurrent += moveSpeed;
+        if (_PlayerColision.Grounded)
+        {
+            moveSpeedCurrent += moveSpeed;
+        }
+        else if (!_PlayerColision.Grounded)
+        {
+            moveSpeedCurrent += airMoveSpeed;
+        }
         if (moveSpeedCurrent >= moveSpeedMax)
         {
             moveSpeedCurrent = moveSpeedMax;
         }
+    }
+    private void crouch()
+    {
+
+    }
+    private void standUp()
+    {
+
     }
     private void jump()
     {

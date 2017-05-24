@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerColision : MonoBehaviour
 {
-    public bool Grounded = false;
     PlayerHealth _PlayerHealth;
+    public bool Grounded = false;
 
     private void Awake()
     {

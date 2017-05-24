@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    PlayerShoot _PlayerShoot;
+    //PlayerShoot _PlayerShoot;
     public bool left = false;
     public bool right = false;
     public bool up = false;
@@ -13,7 +13,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Awake()
     {
-        _PlayerShoot = GetComponent<PlayerShoot>();
+        //_PlayerShoot = GetComponent<PlayerShoot>();
     }
 	private void Update ()
     {
@@ -51,7 +51,12 @@ public class PlayerInput : MonoBehaviour
         }
         if (Input.GetKeyDown("space"))//shoot
         {
-            _PlayerShoot.shoot();
+            shoot = true;
+            //_PlayerShoot.shoot();
+        }
+        if (Input.GetKeyUp("space"))
+        {
+            shoot = false;
         }
         if (Input.GetKeyDown(KeyCode.R))//reload
         {
