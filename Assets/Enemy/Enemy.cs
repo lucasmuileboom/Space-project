@@ -10,6 +10,8 @@ public class Enemy : Character
 
     public GameObject Target { get; set; }
 
+    private PlayerHealth plHealth;
+
     [SerializeField]
     private float meleeRange;
 
@@ -42,8 +44,12 @@ public class Enemy : Character
 
     void Update()
     {
-        currentState.Excute();
-        LookAtTarget();
+        if (!IsDead)
+        {
+            currentState.Excute();
+            LookAtTarget();
+        }
+        
     }
 
 

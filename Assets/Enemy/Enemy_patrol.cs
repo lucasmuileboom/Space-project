@@ -37,6 +37,7 @@ public class Enemy_patrol : IEnemyState
         if(other.tag == "Edge")
         {
             enemy.ChangeDirection();
+            enemy.Target = null;
         }
     }
 

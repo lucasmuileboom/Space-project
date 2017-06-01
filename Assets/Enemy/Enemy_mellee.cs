@@ -18,12 +18,12 @@ public class Enemy_mellee : IEnemyState
 
     public void Excute()
     {
-       Attack();
-      //if (enemy.Target != null)
-      //  {
-      //      enemy.Move();
-      //  }
-        if(enemy.Target != null)
+            Attack();
+        //if (enemy.Target != null)
+        //  {
+        //      enemy.Move();
+        //  }
+        if (enemy.Target != null)
         {
             enemy.ChangeState(new Enemy_idle());
         }
@@ -31,12 +31,17 @@ public class Enemy_mellee : IEnemyState
 
     public void Exit()
     {
-
+             
     }
 
     public void OnTriggerEnter(Collider2D other)
     {
-
+        if (other.tag == "Edge")
+        {
+            enemy.MyAnimator.SetFloat("speed", 0);
+            enemy.Target = null;
+            enemy.ChangeDirection();
+        }
     }
 
     private void Attack()

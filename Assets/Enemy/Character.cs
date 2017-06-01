@@ -36,7 +36,7 @@ public abstract class Character : MonoBehaviour
 
     public virtual void OnTriggerEnter2D(Collider2D other)
     {
-        if(Attack)
+        if(other.tag == "Bullet")
         {
             StartCoroutine(TakeDamge());
         }
