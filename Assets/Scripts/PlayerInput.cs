@@ -52,15 +52,10 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKeyDown("space"))//shoot
         {
             shoot = true;
-            //_PlayerShoot.shoot();
         }
         if (Input.GetKeyUp("space"))
         {
             shoot = false;
-        }
-        if (Input.GetKeyDown(KeyCode.R))//reload
-        {
-            //_PlayerShoot.reload();
         }
     }
 }
