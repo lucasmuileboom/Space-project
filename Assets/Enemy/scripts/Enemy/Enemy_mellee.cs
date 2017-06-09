@@ -20,11 +20,13 @@ public class Enemy_mellee : IEnemyState
     {
             Attack();
         //if (enemy.Target != null)
-        //  {
-        //      enemy.Move();
-        //  }
-        if (enemy.Target != null)
+        //{
+        //    enemy.Move();
+        //}
+        Console.WriteLine( enemy.Target);
+        if (enemy.Target == null)
         {
+
             enemy.ChangeState(new Enemy_idle());
         }
     }
@@ -47,6 +49,11 @@ public class Enemy_mellee : IEnemyState
     private void Attack()
     {
         attackTimer += Time.deltaTime;
+
+        if(attackTimer <= attackCoolDown)
+        {
+            enemy.MyAnimator.ResetTrigger("attack");
+        }
 
         if(attackTimer >= attackCoolDown)
         {

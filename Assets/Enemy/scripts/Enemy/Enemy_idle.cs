@@ -20,14 +20,15 @@ public class Enemy_idle : IEnemyState
     {
         Idle();
 
-        if (enemy.Target != null && enemy.InMeleeRange)
-        {
-            enemy.ChangeState(new Enemy_mellee());
-        }
-        else if (enemy.Target != null)
+        if (enemy.Target == null)
         {
             enemy.ChangeState(new Enemy_patrol());
         }
+        else if (enemy.Target != null && enemy.InMeleeRange)
+        {
+            enemy.ChangeState(new Enemy_mellee());
+        }
+       
     }
 
     public void Exit()

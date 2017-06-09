@@ -10,8 +10,6 @@ public class Enemy : Character
 
     public GameObject Target { get; set; }
 
-    private PlayerHealth plHealth;
-
     [SerializeField]
     private float meleeRange;
 
