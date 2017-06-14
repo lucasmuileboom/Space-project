@@ -6,10 +6,9 @@ public class PlayerMovement : MonoBehaviour
 {
     //hit
     //death
-    [SerializeField]
     Animator animatie;
     private PlayerInput _PlayerInput;
-    private PlayerColision _PlayerColision;
+    private Groundcollision _Groundcollision;
     private Vector2 moveVector;
     private Vector2 jumpReset;
     private int jumpForce = 15;
@@ -28,11 +27,11 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         _PlayerInput = GetComponent<PlayerInput>();
-        _PlayerColision = GetComponent<PlayerColision>();
+        _Groundcollision = GameObject.Find("groundcheck").GetComponent<Groundcollision>();
     }
     private void Start()
     {
-//animatie = GetComponent<Animator>();
+       animatie = GetComponent<Animator>();
     }
     private void Update()
     {
@@ -73,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (_PlayerInput.up)//jump
         {
-            if (!jumping && _PlayerColision.Grounded)
+            if (!jumping && _Groundcollision.Grounded)
             {
                 jump();
                 
@@ -87,14 +86,14 @@ public class PlayerMovement : MonoBehaviour
         {
             standUp();
         }
-        if (!_PlayerColision.Grounded)//air
+        if (!_Groundcollision.Grounded)//air
         {
             animatie.SetBool("grounded", false);
             jumping = true;
             jumpForceCurrent -= gravity;
             moveSpeedDecFactor = 0.99f;
         }
-        else if (_PlayerColision.Grounded)//grounded
+        else if (_Groundcollision.Grounded)//grounded
         {
             animatie.SetBool("jumpUp", false);
             animatie.SetBool("jumpDown", false);
@@ -128,11 +127,11 @@ public class PlayerMovement : MonoBehaviour
     {
         animatie.SetBool("move", true);
         animatie.SetBool("idle", false);
-        if (_PlayerColision.Grounded)
+        if (_Groundcollision.Grounded)
         {
             moveSpeedCurrent += moveSpeed;
         }
-        else if (!_PlayerColision.Grounded)
+        else if (!_Groundcollision.Grounded)
         {
             moveSpeedCurrent += airMoveSpeed;
         }
@@ -145,11 +144,11 @@ public class PlayerMovement : MonoBehaviour
     {
         animatie.SetBool("move", true);
         animatie.SetBool("idle", false);
-        if (_PlayerColision.Grounded)
+        if (_Groundcollision.Grounded)
         {
             moveSpeedCurrent += moveSpeed;
         }
-        else if (!_PlayerColision.Grounded)
+        else if (!_Groundcollision.Grounded)
         {
             moveSpeedCurrent += airMoveSpeed;
         }
@@ -163,7 +162,7 @@ public class PlayerMovement : MonoBehaviour
         animatie.SetBool("idle", false);
         jumpForceCurrent += jumpForce;
         jumping = true;
-        _PlayerColision.Grounded = false;
+        _Groundcollision.Grounded = false;
         moveSpeedCurrent = moveSpeedCurrent / 2;
     }
     private void crouch()
