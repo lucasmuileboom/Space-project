@@ -18,13 +18,11 @@ public class Enemy_idle : IEnemyState
 
     public void Excute()
     {
-        Idle();
-
         if (enemy.Target == null)
         {
-            enemy.ChangeState(new Enemy_patrol());
+            Idle();
         }
-        else if (enemy.Target != null && enemy.InMeleeRange)
+        if (enemy.Target != null && enemy.InMeleeRange)
         {
             enemy.ChangeState(new Enemy_mellee());
         }
@@ -53,6 +51,8 @@ public class Enemy_idle : IEnemyState
         if(idleTimer >= idleDuration)
         {
             enemy.ChangeState(new Enemy_patrol());
+            enemy.MyAnimator.SetFloat("speed", 1);
+            idleTimer = 0;
         }
     }
 }

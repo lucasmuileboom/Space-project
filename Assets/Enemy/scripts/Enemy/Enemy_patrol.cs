@@ -9,7 +9,7 @@ public class Enemy_patrol : IEnemyState
 
     private float patrolTimer;
 
-    private float patrolDuration = 10;
+    private float patrolDuration = 1;
 
     public void Enter(Enemy enemy)
     {
@@ -47,7 +47,9 @@ public class Enemy_patrol : IEnemyState
 
         if (patrolTimer >= patrolDuration)
         {
+            //enemy.MyAnimator.SetFloat("speed", 0);
             enemy.ChangeState(new Enemy_idle());
+            patrolTimer = 0;
         }
     }
 }
