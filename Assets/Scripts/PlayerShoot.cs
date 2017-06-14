@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerShoot : MonoBehaviour
 {
-    [SerializeField]
     Animator animatie;
     private PlayerInput _PlayerInput;
     [SerializeField] private GameObject projectile;
@@ -23,6 +22,7 @@ public class PlayerShoot : MonoBehaviour
     }
     private void Start()
     {
+        animatie = GetComponent<Animator>();
         nextFire = Time.time + fireRate;
     }
     private void Update()
