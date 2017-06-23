@@ -40,10 +40,10 @@ public class Enemy_patrol : IEnemyState
             enemy.Target = null;
         }
     }
-
+        
     private void patrol()
     {
-        patrolTimer += Time.deltaTime;;
+        patrolTimer += Time.deltaTime;
         if (patrolTimer >= patrolDuration)
         {
             enemy.ChangeState(new Enemy_idle());

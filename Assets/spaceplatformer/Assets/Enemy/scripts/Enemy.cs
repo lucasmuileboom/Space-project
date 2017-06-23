@@ -114,9 +114,10 @@ public class Enemy : Character
         {
             MyAnimator.SetTrigger("dead");
             yield return null;
-            deathTimer += Time.deltaTime; ;
+            deathTimer += Time.deltaTime;
             if (deathTimer >= deathDuration)
             {
+                print("blarg");
                 Destroy(gameObject);
                 Speed = 0;
             }
