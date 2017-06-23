@@ -13,6 +13,10 @@ public class Enemy : Character
     [SerializeField]
     private float meleeRange;
 
+    private float deathTimer;
+
+    private float deathDuration = 1;
+
     public bool InMeleeRange
     {
         get
@@ -110,6 +114,12 @@ public class Enemy : Character
         {
             MyAnimator.SetTrigger("dead");
             yield return null;
+            deathTimer += Time.deltaTime; ;
+            if (deathTimer >= deathDuration)
+            {
+                Destroy(gameObject);
+                Speed = 0;
+            }
         }
     }
 }

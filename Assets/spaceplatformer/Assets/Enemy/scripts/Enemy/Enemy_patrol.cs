@@ -19,7 +19,7 @@ public class Enemy_patrol : IEnemyState
     public void Excute()
     {
         patrol();
-
+        
         enemy.Move();
         if (enemy.Target != null && enemy.InMeleeRange)
         {
@@ -29,7 +29,7 @@ public class Enemy_patrol : IEnemyState
 
     public void Exit()
     {
-
+       
     }
 
     public void OnTriggerEnter(Collider2D other)
@@ -43,8 +43,7 @@ public class Enemy_patrol : IEnemyState
 
     private void patrol()
     {
-        patrolTimer += Time.deltaTime;
-
+        patrolTimer += Time.deltaTime;;
         if (patrolTimer >= patrolDuration)
         {
             enemy.ChangeState(new Enemy_idle());
